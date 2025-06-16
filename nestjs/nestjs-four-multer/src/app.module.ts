@@ -6,7 +6,10 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { diskStorage } from 'multer';
 import { editFileName } from './utils/file-upload.utils';
-import { TaskModule } from './task/task.module';
+import { UserModule } from './users/user.module';
+import { WordModule } from './words/word.module';
+import { DictionaryModule } from './dictionary/dictionary.module';
+import { HistoryModule } from './history/history.module';
 
 
 @Module({
@@ -20,7 +23,10 @@ import { TaskModule } from './task/task.module';
     rootPath: join(__dirname, '..', 'uploads'),
     serveRoot: '/public',
   }),
-    TaskModule
+    UserModule,
+    WordModule,
+    DictionaryModule,
+    HistoryModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,42 @@
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
+import { Historia } from "generated/prisma";
+import { HistoryService } from "./history.service";
+
+@Controller('history')
+export class HistoryController {
+
+  constructor(private readonly historiaService: HistoryService) { }
+
+  @Get()
+  async getAllHistorias() {
+    return await this.historiaService.getAllHistorias();
+  }
+
+  @Get(':id')
+  async getHistoriaById(@Param('id') id: string) {
+    const historiaFound = await this.historiaService.getHistoriaById(+id);
+    if (!historiaFound) {
+      throw new NotFoundException(`Historia with id ${id} not found`);
+    }
+    return historiaFound;
+  }
+
+  @Post()
+  async createHistoria(@Body() data: Historia) {
+    return await this.historiaService.createHistoria(data);
+  }
+
+  @Put(':id')
+  async updateHistoria(@Param('id') id: string, @Body() data: Historia) {
+    return await this.historiaService.updateHistoria(+id, data);
+  }
+
+  @Delete(':id')
+  async deleteHistoria(@Param('id') id: string) {
+    try {
+      return await this.historiaService.deleteHistoria(+id);
+    } catch (error) {
+      throw new BadRequestException(`Error deleting historia with id ${id}: ${error.message}`);
+    }
+  }
+}

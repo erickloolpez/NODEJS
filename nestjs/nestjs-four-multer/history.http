@@ -1,0 +1,29 @@
+### GET TASKS
+GET http://localhost:3003/history
+
+### POST TASK
+POST http://localhost:3003/history
+Content-Type: application/json
+
+{
+  "id_usuario": 1,
+  "id_diccionario": 1,
+  "titulo_historia": "El mundo de Platon",
+  "historia": "El peleaba con todos los sofistas que se encontraba en su camino"
+}
+
+### GET TASK BY ID
+GET http://localhost:3003/history/1
+
+### PUT TASK
+PUT http://localhost:3003/history/1
+Content-Type: application/json
+
+{
+  "historia": "El peleaba con todos los sofistas que se encontraba en su camino, pero al final siempre ganaba"
+}
+
+### DELETE TASK
+DELETE http://localhost:3003/history/2
+
+

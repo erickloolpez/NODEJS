@@ -7,12 +7,72 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  // provider = "sqlite"
+  // url      = env("DATABASE_URL")
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Task {
-  id          Int     @id @default(autoincrement())
-  title       String
-  description String?
+model Usuario {
+  id_usuario          Int      @id @default(autoincrement()) @map("id_usuario")
+  nombre_usuario      String   @map("nombre_usuario") @db.VarChar(255)
+  email               String   @unique @db.VarChar(255)
+  fecha_creacion      DateTime @default(now()) @map("fecha_creacion")
+  fecha_actualizacion DateTime @default(now()) @updatedAt @map("fecha_actualizacion")
+
+  // Relaciones
+  diccionarios Diccionario[]
+  historias    Historia[]
+
+  @@index([email], map: "idx_usuarios_email")
+  @@map("usuarios")
+}
+
+model Diccionario {
+  id_diccionario      Int      @id @default(autoincrement()) @map("id_diccionario")
+  id_usuario          Int      @map("id_usuario")
+  nombre_diccionario  String?  @map("nombre_diccionario") @db.VarChar(255)
+  descripcion         String?  @db.Text
+  fecha_creacion      DateTime @default(now()) @map("fecha_creacion")
+  fecha_actualizacion DateTime @default(now()) @updatedAt @map("fecha_actualizacion")
+
+  // Relaciones
+  usuario   Usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+  palabras  Palabra[]
+  historias Historia[]
+
+  @@index([id_usuario], map: "idx_diccionarios_usuario")
+  @@map("diccionarios")
+}
+
+model Palabra {
+  id_palabra     Int      @id @default(autoincrement()) @map("id_palabra")
+  id_diccionario Int      @map("id_diccionario")
+  palabra        String   @db.VarChar(255)
+  relacion       String   @db.Text
+  fecha_creacion DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  diccionario Diccionario @relation(fields: [id_diccionario], references: [id_diccionario], onDelete: Cascade)
+
+  @@index([id_diccionario], map: "idx_palabras_diccionario")
+  @@map("palabras")
+}
+
+model Historia {
+  id_historia         Int      @id @default(autoincrement()) @map("id_historia")
+  id_usuario          Int      @map("id_usuario")
+  id_diccionario      Int      @map("id_diccionario")
+  titulo_historia     String?  @map("titulo_historia") @db.VarChar(255)
+  historia            String   @db.Text
+  fecha_creacion      DateTime @default(now()) @map("fecha_creacion")
+  fecha_actualizacion DateTime @default(now()) @updatedAt @map("fecha_actualizacion")
+
+  // Relaciones
+  usuario     Usuario     @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+  diccionario Diccionario @relation(fields: [id_diccionario], references: [id_diccionario], onDelete: Cascade)
+
+  @@index([id_usuario], map: "idx_historias_usuario")
+  @@index([id_diccionario], map: "idx_historias_diccionario")
+  @@map("historias")
 }

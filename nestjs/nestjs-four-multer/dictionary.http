@@ -1,0 +1,28 @@
+### GET TASKS
+GET http://localhost:3003/dictionary
+
+### POST TASK
+POST http://localhost:3003/dictionary
+Content-Type: application/json
+
+{
+  "id_usuario": 1,
+  "nombre_diccionario": "erick@notion.com",
+  "descripcion": "Diccionario de Erick"
+}
+
+### GET TASK BY ID
+GET http://localhost:3003/dictionary/1
+
+### PUT TASK
+PUT http://localhost:3003/dictionary/1
+Content-Type: application/json
+
+{
+  "descripcion": "Diccionario de las mil noches"
+}
+
+### DELETE TASK
+DELETE http://localhost:3003/dictionary/2
+
+
