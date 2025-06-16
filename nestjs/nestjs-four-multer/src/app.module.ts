@@ -6,6 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { diskStorage } from 'multer';
 import { editFileName } from './utils/file-upload.utils';
+import { TaskModule } from './task/task.module';
 
 
 @Module({
@@ -18,7 +19,8 @@ import { editFileName } from './utils/file-upload.utils';
   ServeStaticModule.forRoot({
     rootPath: join(__dirname, '..', 'uploads'),
     serveRoot: '/public',
-  })
+  }),
+    TaskModule
   ],
   controllers: [AppController],
   providers: [AppService],
