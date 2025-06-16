@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { PrismaService } from './prisma/prisma.service';
 
 @Injectable()
 export class AppService {
+  constructor(private prisma: PrismaService) {
+
+  }
   getHello(): string {
     return 'Hello World!';
   }
@@ -31,6 +35,51 @@ export class AppService {
     return {
       message: 'File uploaded successfully',
       ...payload,
+    };
+  }
+
+  async processEntry(
+    data: {
+      output: {
+        palabras: { word: string; relation: string }[];
+        history: string;
+      };
+    },
+    id_usuario: number,
+    id_diccionario: number,
+    titulo_historia?: string
+  ) {
+    // Verificar si la estructura es correcta
+    if (!data || !data.output || !data.output.palabras) {
+      throw new Error(`Estructura de datos incorrecta. Se esperaba data.output.palabras`);
+    }
+
+    // 1. Guardar palabras
+    const palabrasCreadas = await Promise.all(
+      data.output.palabras.map((p) =>
+        this.prisma.palabra.create({
+          data: {
+            palabra: p.word,
+            relacion: p.relation,
+            id_diccionario: id_diccionario,
+          },
+        })
+      )
+    );
+
+    // 2. Guardar historia
+    const historiaCreada = await this.prisma.historia.create({
+      data: {
+        id_usuario: id_usuario,
+        id_diccionario: id_diccionario,
+        titulo_historia: titulo_historia ?? null,
+        historia: data.output.history,
+      },
+    });
+
+    return {
+      palabras: palabrasCreadas,
+      historia: historiaCreada,
     };
   }
 }

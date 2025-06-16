@@ -17,4 +17,15 @@ export class AppController {
     console.log(file);
     return await this.appService.processFileUpload(file);
   }
+
+  @Post('genesis')
+  async creation(@Body() data: any) {
+    const resultado = await this.appService.processEntry(
+      data,
+      1,
+      1,
+      "Mi historia sobre ética"
+    );
+    return resultado
+  }
 }

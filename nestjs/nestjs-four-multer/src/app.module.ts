@@ -10,6 +10,7 @@ import { UserModule } from './users/user.module';
 import { WordModule } from './words/word.module';
 import { DictionaryModule } from './dictionary/dictionary.module';
 import { HistoryModule } from './history/history.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 
 @Module({
@@ -26,7 +27,8 @@ import { HistoryModule } from './history/history.module';
     UserModule,
     WordModule,
     DictionaryModule,
-    HistoryModule
+    HistoryModule,
+    PrismaModule
   ],
   controllers: [AppController],
   providers: [AppService],
