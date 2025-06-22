@@ -44,6 +44,8 @@ export class AppService {
         palabras: { word: string; relation: string }[];
         history: string;
       };
+      place: string;
+      character: string;
     },
     id_usuario: number,
     id_diccionario: number,
@@ -57,23 +59,25 @@ export class AppService {
     // 1. Guardar palabras
     const palabrasCreadas = await Promise.all(
       data.output.palabras.map((p) =>
-        this.prisma.palabra.create({
+        this.prisma.word.create({
           data: {
-            palabra: p.word,
-            relacion: p.relation,
-            id_diccionario: id_diccionario,
+            word: p.word,
+            relation: p.relation,
+            dictionary_id: id_diccionario,
           },
         })
       )
     );
 
     // 2. Guardar historia
-    const historiaCreada = await this.prisma.historia.create({
+    const historiaCreada = await this.prisma.story.create({
       data: {
-        id_usuario: id_usuario,
-        id_diccionario: id_diccionario,
-        titulo_historia: titulo_historia ?? null,
-        historia: data.output.history,
+        user_id: id_usuario,
+        dictionary_id: id_diccionario,
+        story_title: titulo_historia ?? null,
+        story: data.output.history,
+        place: data.place ?? null,
+        character: data.character ?? null,
       },
     });
 

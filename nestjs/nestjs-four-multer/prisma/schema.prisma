@@ -1,78 +1,82 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
 datasource db {
-  // provider = "sqlite"
-  // url      = env("DATABASE_URL")
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-model Usuario {
-  id_usuario          Int      @id @default(autoincrement()) @map("id_usuario")
-  nombre_usuario      String   @map("nombre_usuario") @db.VarChar(255)
-  email               String   @unique @db.VarChar(255)
-  fecha_creacion      DateTime @default(now()) @map("fecha_creacion")
-  fecha_actualizacion DateTime @default(now()) @updatedAt @map("fecha_actualizacion")
+model User {
+  user_id    Int      @id @default(autoincrement()) @map("user_id")
+  username   String   @map("username") @db.VarChar(255)
+  email      String   @unique @db.VarChar(255)
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @default(now()) @updatedAt @map("updated_at")
 
-  // Relaciones
-  diccionarios Diccionario[]
-  historias    Historia[]
+  // Relations
+  dictionaries Dictionary[]
+  stories      Story[]
 
-  @@index([email], map: "idx_usuarios_email")
-  @@map("usuarios")
+  @@index([email], map: "idx_users_email")
+  @@map("users")
 }
 
-model Diccionario {
-  id_diccionario      Int      @id @default(autoincrement()) @map("id_diccionario")
-  id_usuario          Int      @map("id_usuario")
-  nombre_diccionario  String?  @map("nombre_diccionario") @db.VarChar(255)
-  descripcion         String?  @db.Text
-  fecha_creacion      DateTime @default(now()) @map("fecha_creacion")
-  fecha_actualizacion DateTime @default(now()) @updatedAt @map("fecha_actualizacion")
+model Dictionary {
+  dictionary_id   Int      @id @default(autoincrement()) @map("dictionary_id")
+  user_id         Int      @map("user_id")
+  dictionary_name String?  @map("dictionary_name") @db.VarChar(255)
+  description     String?  @db.Text
+  created_at      DateTime @default(now()) @map("created_at")
+  updated_at      DateTime @default(now()) @updatedAt @map("updated_at")
 
-  // Relaciones
-  usuario   Usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
-  palabras  Palabra[]
-  historias Historia[]
+  // Relations
+  user    User    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  words   Word[]
+  stories Story[]
 
-  @@index([id_usuario], map: "idx_diccionarios_usuario")
-  @@map("diccionarios")
+  @@index([user_id], map: "idx_dictionaries_user")
+  @@map("dictionaries")
 }
 
-model Palabra {
-  id_palabra     Int      @id @default(autoincrement()) @map("id_palabra")
-  id_diccionario Int      @map("id_diccionario")
-  palabra        String   @db.VarChar(255)
-  relacion       String   @db.Text
-  fecha_creacion DateTime @default(now()) @map("fecha_creacion")
+model Word {
+  word_id       Int      @id @default(autoincrement()) @map("word_id")
+  dictionary_id Int      @map("dictionary_id")
+  word          String   @db.VarChar(255)
+  relation      String   @db.Text
+  created_at    DateTime @default(now()) @map("created_at")
 
-  // Relaciones
-  diccionario Diccionario @relation(fields: [id_diccionario], references: [id_diccionario], onDelete: Cascade)
+  // Relations
+  dictionary Dictionary @relation(fields: [dictionary_id], references: [dictionary_id], onDelete: Cascade)
 
-  @@index([id_diccionario], map: "idx_palabras_diccionario")
-  @@map("palabras")
+  @@index([dictionary_id], map: "idx_words_dictionary")
+  @@map("words")
 }
 
-model Historia {
-  id_historia         Int      @id @default(autoincrement()) @map("id_historia")
-  id_usuario          Int      @map("id_usuario")
-  id_diccionario      Int      @map("id_diccionario")
-  titulo_historia     String?  @map("titulo_historia") @db.VarChar(255)
-  historia            String   @db.Text
-  fecha_creacion      DateTime @default(now()) @map("fecha_creacion")
-  fecha_actualizacion DateTime @default(now()) @updatedAt @map("fecha_actualizacion")
+model Story {
+  story_id      Int      @id @default(autoincrement()) @map("story_id")
+  user_id       Int      @map("user_id")
+  dictionary_id Int      @map("dictionary_id")
+  story_title   String?  @map("story_title") @db.VarChar(255)
+  story         String   @db.Text
+  character     String?  @db.VarChar(255)
+  place         String?  @db.VarChar(255)
+  created_at    DateTime @default(now()) @map("created_at")
+  updated_at    DateTime @default(now()) @updatedAt @map("updated_at")
 
-  // Relaciones
-  usuario     Usuario     @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
-  diccionario Diccionario @relation(fields: [id_diccionario], references: [id_diccionario], onDelete: Cascade)
+  // Relations
+  user       User       @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  dictionary Dictionary @relation(fields: [dictionary_id], references: [dictionary_id], onDelete: Cascade)
 
-  @@index([id_usuario], map: "idx_historias_usuario")
-  @@index([id_diccionario], map: "idx_historias_diccionario")
-  @@map("historias")
+  @@index([user_id], map: "idx_stories_user")
+  @@index([dictionary_id], map: "idx_stories_dictionary")
+  @@map("stories")
 }

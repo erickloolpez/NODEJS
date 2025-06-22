@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Palabra } from "generated/prisma/client";
+import { Word } from "generated/prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 
 
@@ -10,34 +10,34 @@ export class WordService {
 
   }
 
-  async getAllTasks(): Promise<Palabra[]> {
-    return this.prisma.palabra.findMany()
+  async getAllTasks(): Promise<Word[]> {
+    return this.prisma.word.findMany()
   }
 
-  async getTaskById(id: number): Promise<Palabra | null> {
-    return this.prisma.palabra.findUnique({
+  async getTaskById(id: number): Promise<Word | null> {
+    return this.prisma.word.findUnique({
       where: {
-        id_palabra: id
+        word_id: id
       }
     })
   }
-  async createTask(data: Palabra): Promise<Palabra> {
-    return this.prisma.palabra.create({
+  async createTask(data: Word): Promise<Word> {
+    return this.prisma.word.create({
       data
     })
   }
-  async updateTask(id: number, data: Palabra): Promise<Palabra> {
-    return this.prisma.palabra.update({
+  async updateTask(id: number, data: Word): Promise<Word> {
+    return this.prisma.word.update({
       where: {
-        id_palabra: id
+        word_id: id
       },
       data
     })
   }
-  async deleteTask(id: number): Promise<Palabra> {
-    return this.prisma.palabra.delete({
+  async deleteTask(id: number): Promise<Word> {
+    return this.prisma.word.delete({
       where: {
-        id_palabra: id
+        word_id: id
       }
     })
   }

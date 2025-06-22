@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Usuario } from "generated/prisma/client";
+import { User } from "generated/prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 
 
@@ -10,34 +10,34 @@ export class UserService {
 
   }
 
-  async getAllTasks(): Promise<Usuario[]> {
-    return this.prisma.usuario.findMany()
+  async getAllTasks(): Promise<User[]> {
+    return this.prisma.user.findMany()
   }
 
-  async getTaskById(id: number): Promise<Usuario | null> {
-    return this.prisma.usuario.findUnique({
+  async getTaskById(id: number): Promise<User | null> {
+    return this.prisma.user.findUnique({
       where: {
-        id_usuario: id
+        user_id: id
       }
     })
   }
-  async createTask(data: Usuario): Promise<Usuario> {
-    return this.prisma.usuario.create({
+  async createTask(data: User): Promise<User> {
+    return this.prisma.user.create({
       data
     })
   }
-  async updateTask(id: number, data: Usuario): Promise<Usuario> {
-    return this.prisma.usuario.update({
+  async updateTask(id: number, data: User): Promise<User> {
+    return this.prisma.user.update({
       where: {
-        id_usuario: id
+        user_id: id
       },
       data
     })
   }
-  async deleteTask(id: number): Promise<Usuario> {
-    return this.prisma.usuario.delete({
+  async deleteTask(id: number): Promise<User> {
+    return this.prisma.user.delete({
       where: {
-        id_usuario: id
+        user_id: id
       }
     })
   }

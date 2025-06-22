@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
-import { Palabra } from "generated/prisma";
+import { Word } from "generated/prisma";
 import { WordService } from "./word.service";
 
 
@@ -25,12 +25,12 @@ export class WordController {
   }
 
   @Post()
-  async createTask(@Body() data: Palabra) {
+  async createTask(@Body() data: Word) {
     return await this.wordService.createTask(data)
   }
 
   @Put(':id')
-  async updateTask(@Param('id') id: string, @Body() data: Palabra) {
+  async updateTask(@Param('id') id: string, @Body() data: Word) {
     return await this.wordService.updateTask(+id, data);
   }
 

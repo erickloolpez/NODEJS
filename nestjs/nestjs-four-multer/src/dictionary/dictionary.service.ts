@@ -1,6 +1,6 @@
 
 import { Injectable } from "@nestjs/common";
-import { Diccionario } from "generated/prisma/client";
+import { Dictionary } from "generated/prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 
 
@@ -11,34 +11,34 @@ export class DictionaryService {
 
   }
 
-  async getAllTasks(): Promise<Diccionario[]> {
-    return this.prisma.diccionario.findMany()
+  async getAllTasks(): Promise<Dictionary[]> {
+    return this.prisma.dictionary.findMany()
   }
 
-  async getTaskById(id: number): Promise<Diccionario | null> {
-    return this.prisma.diccionario.findUnique({
+  async getTaskById(id: number): Promise<Dictionary | null> {
+    return this.prisma.dictionary.findUnique({
       where: {
-        id_diccionario: id
+        dictionary_id: id
       }
     })
   }
-  async createTask(data: Diccionario): Promise<Diccionario> {
-    return this.prisma.diccionario.create({
+  async createTask(data: Dictionary): Promise<Dictionary> {
+    return this.prisma.dictionary.create({
       data
     })
   }
-  async updateTask(id: number, data: Diccionario): Promise<Diccionario> {
-    return this.prisma.diccionario.update({
+  async updateTask(id: number, data: Dictionary): Promise<Dictionary> {
+    return this.prisma.dictionary.update({
       where: {
-        id_diccionario: id
+        dictionary_id: id
       },
       data
     })
   }
-  async deleteTask(id: number): Promise<Diccionario> {
-    return this.prisma.diccionario.delete({
+  async deleteTask(id: number): Promise<Dictionary> {
+    return this.prisma.dictionary.delete({
       where: {
-        id_diccionario: id
+        dictionary_id: id
       }
     })
   }

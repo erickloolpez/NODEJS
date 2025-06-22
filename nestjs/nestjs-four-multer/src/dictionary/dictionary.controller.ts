@@ -1,6 +1,6 @@
 
 import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
-import { Diccionario } from "generated/prisma";
+import { Dictionary } from "generated/prisma";
 import { DictionaryService } from "./dictionary.service";
 
 
@@ -26,7 +26,7 @@ export class DictionaryController {
   }
 
   @Post()
-  async createTask(@Body() data: Diccionario) {
+  async createTask(@Body() data: Dictionary) {
     try {
       return await this.dictionaryService.createTask(data)
     } catch (error) {
@@ -35,7 +35,7 @@ export class DictionaryController {
   }
 
   @Put(':id')
-  async updateTask(@Param('id') id: string, @Body() data: Diccionario) {
+  async updateTask(@Param('id') id: string, @Body() data: Dictionary) {
     return await this.dictionaryService.updateTask(+id, data);
   }
 

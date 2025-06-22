@@ -1,6 +1,6 @@
 import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { Usuario } from "generated/prisma";
+import { User } from "generated/prisma";
 
 
 @Controller('users')
@@ -25,12 +25,12 @@ export class UserController {
   }
 
   @Post()
-  async createTask(@Body() data: Usuario) {
+  async createTask(@Body() data: User) {
     return await this.userService.createTask(data)
   }
 
   @Put(':id')
-  async updateTask(@Param('id') id: string, @Body() data: Usuario) {
+  async updateTask(@Param('id') id: string, @Body() data: User) {
     return await this.userService.updateTask(+id, data);
   }
 

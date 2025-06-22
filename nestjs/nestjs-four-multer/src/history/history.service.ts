@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Historia } from "generated/prisma/client";
+import { Story } from "generated/prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
@@ -7,37 +7,37 @@ export class HistoryService {
 
   constructor(private prisma: PrismaService) { }
 
-  async getAllHistorias(): Promise<Historia[]> {
-    return this.prisma.historia.findMany();
+  async getAllHistorias(): Promise<Story[]> {
+    return this.prisma.story.findMany();
   }
 
-  async getHistoriaById(id: number): Promise<Historia | null> {
-    return this.prisma.historia.findUnique({
+  async getHistoriaById(id: number): Promise<Story | null> {
+    return this.prisma.story.findUnique({
       where: {
-        id_historia: id
+        story_id: id
       }
     });
   }
 
-  async createHistoria(data: Omit<Historia, 'id_historia'>): Promise<Historia> {
-    return this.prisma.historia.create({
+  async createHistoria(data: Omit<Story, 'id_historia'>): Promise<Story> {
+    return this.prisma.story.create({
       data
     });
   }
 
-  async updateHistoria(id: number, data: Partial<Historia>): Promise<Historia> {
-    return this.prisma.historia.update({
+  async updateHistoria(id: number, data: Partial<Story>): Promise<Story> {
+    return this.prisma.story.update({
       where: {
-        id_historia: id
+        story_id: id
       },
       data
     });
   }
 
-  async deleteHistoria(id: number): Promise<Historia> {
-    return this.prisma.historia.delete({
+  async deleteHistoria(id: number): Promise<Story> {
+    return this.prisma.story.delete({
       where: {
-        id_historia: id
+        story_id: id
       }
     });
   }

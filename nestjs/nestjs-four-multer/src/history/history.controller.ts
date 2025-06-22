@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
-import { Historia } from "generated/prisma";
+import { Story } from "generated/prisma";
 import { HistoryService } from "./history.service";
 
 @Controller('history')
@@ -22,12 +22,12 @@ export class HistoryController {
   }
 
   @Post()
-  async createHistoria(@Body() data: Historia) {
+  async createHistoria(@Body() data: Story) {
     return await this.historiaService.createHistoria(data);
   }
 
   @Put(':id')
-  async updateHistoria(@Param('id') id: string, @Body() data: Historia) {
+  async updateHistoria(@Param('id') id: string, @Body() data: Story) {
     return await this.historiaService.updateHistoria(+id, data);
   }
 
