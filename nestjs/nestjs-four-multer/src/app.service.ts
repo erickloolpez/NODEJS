@@ -23,10 +23,13 @@ export class AppService {
       uploadedAt: new Date().toISOString(),
     };
 
+    let responseWebhook = null
+
     // Llamar al webhook de n8n
     try {
       const response = await axios.post('https://n8n.srv831273.hstgr.cloud/webhook-test/9552c142-3a97-4805-840a-28f3a04423b8', payload);
       console.log('Webhook de n8n llamado exitosamente:', response.status);
+      responseWebhook = response.data;
     } catch (error) {
       console.error('Error llamando al webhook de n8n:', error.message);
       // Aquí puedes decidir si quieres lanzar una excepción o solo loggear el error

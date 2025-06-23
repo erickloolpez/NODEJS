@@ -13,9 +13,9 @@ export const cleanFileName = (fileName) => {
 export const editFileName = (req, file, callback) => {
   const cleanedName = cleanFileName(file.originalname);
   const fileExtName = extname(file.originalname);
-  const randomName = Array(8)
-    .fill(null)
-    .map(() => Math.floor(Math.random() * 10))
-    .join('');
-  callback(null, `${cleanedName}-${randomName}${fileExtName}`);
+  // const randomName = Array(8)
+  //   .fill(null)
+  //   .map(() => Math.floor(Math.random() * 10))
+  //   .join('');
+  callback(null, `${cleanedName}${fileExtName}`);
 };

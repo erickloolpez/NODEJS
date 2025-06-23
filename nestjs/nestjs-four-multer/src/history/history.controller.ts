@@ -21,6 +21,15 @@ export class HistoryController {
     return historiaFound;
   }
 
+  @Get('user/:userId')
+  async getHistoriasByUserId(@Param('userId') userId: string) {
+    const historias = await this.historiaService.getHistoriasByUserId(+userId);
+    if (!historias || historias.length === 0) {
+      throw new NotFoundException(`No historias found for user with id ${userId}`);
+    }
+    return historias;
+  }
+
   @Post()
   async createHistoria(@Body() data: Story) {
     return await this.historiaService.createHistoria(data);

@@ -15,12 +15,15 @@ Content-Type: application/json
 ### GET TASK BY ID
 GET http://localhost:3003/history/1
 
+### GET TASK BY ID
+GET http://localhost:3003/history/user/1
+
 ### PUT TASK
-PUT http://localhost:3003/history/1
+PUT http://localhost:3003/history/17
 Content-Type: application/json
 
 {
-  "historia": "El peleaba con todos los sofistas que se encontraba en su camino, pero al final siempre ganaba"
+  "character": "Patito"
 }
 
 ### DELETE TASK
