@@ -1,57 +1,56 @@
 import { Injectable } from "@nestjs/common";
-import { Story } from "generated/prisma/client";
-import { DictionaryService } from "src/dictionary/dictionary.service";
+import { StoryDetails } from "generated/prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "src/users/user.service";
 
 @Injectable()
 export class HistoryService {
 
-  constructor(private prisma: PrismaService, private dictionaryService: DictionaryService) { }
+  constructor(private prisma: PrismaService, private userService: UserService) { }
 
-  async getAllHistorias(): Promise<Story[]> {
-    return this.prisma.story.findMany();
+  async getAllStoriesDetails(): Promise<StoryDetails[]> {
+    return this.prisma.storyDetails.findMany();
   }
 
-  async getHistoriaById(id: number): Promise<Story | null> {
-    return this.prisma.story.findUnique({
+  async getStoryDetailsById(id: number): Promise<StoryDetails | null> {
+    return this.prisma.storyDetails.findUnique({
       where: {
-        story_id: id
+        story_details_id: id
       }
     });
   }
 
-  async createHistoria(data: Omit<Story, 'id_historia'>): Promise<Story> {
-    return this.prisma.story.create({
+  async createStoryDetails(data: Omit<StoryDetails, 'id_historia'>): Promise<StoryDetails> {
+    return this.prisma.storyDetails.create({
       data
     });
   }
 
-  async updateHistoria(id: number, data: Partial<Story>): Promise<Story> {
-    return this.prisma.story.update({
+  async updateStoryDetails(id: number, data: Partial<StoryDetails>): Promise<StoryDetails> {
+    return this.prisma.storyDetails.update({
       where: {
-        story_id: id
+        story_details_id: id
       },
       data
     });
   }
 
-  async deleteHistoria(id: number): Promise<Story> {
-    return this.prisma.story.delete({
+  async deleteStoryDetails(id: number): Promise<StoryDetails> {
+    return this.prisma.storyDetails.delete({
       where: {
-        story_id: id
+        story_details_id: id
       }
     });
   }
 
-  async getHistoriasByUserId(dictionaryId: number): Promise<Story[]> {
-    const dictionary = await this.dictionaryService.getDictionaryById(dictionaryId);
-    if (!dictionary) {
-      throw new Error(`Dictionary with id ${dictionaryId} not found`);
+  async getStoryDetailsByUser(userId: number): Promise<StoryDetails[]> {
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new Error(`User with id ${userId} not found`);
     }
-    return this.prisma.story.findMany({
+    return this.prisma.storyDetails.findMany({
       where: {
-        dictionary_id: dictionary.dictionary_id
+        user_id: user.user_id
       }
     });
   }

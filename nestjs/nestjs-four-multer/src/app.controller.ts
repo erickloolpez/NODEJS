@@ -23,8 +23,6 @@ export class AppController {
     const resultado = await this.appService.processEntry(
       data,
       1,
-      1,
-      "Mi historia sobre ética"
     );
     return resultado
   }

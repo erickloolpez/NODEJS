@@ -25,8 +25,8 @@ import { PrismaModule } from './prisma/prisma.module';
     serveRoot: '/public',
   }),
     UserModule,
-    WordModule,
     DictionaryModule,
+    WordModule,
     HistoryModule,
     PrismaModule
   ],

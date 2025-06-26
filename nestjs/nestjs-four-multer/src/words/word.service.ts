@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Word } from "generated/prisma/client";
+import { Association } from "generated/prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 
 
@@ -10,35 +10,45 @@ export class WordService {
 
   }
 
-  async getAllTasks(): Promise<Word[]> {
-    return this.prisma.word.findMany()
+  async getAllAssociations(): Promise<Association[]> {
+    return this.prisma.association.findMany()
   }
 
-  async getTaskById(id: number): Promise<Word | null> {
-    return this.prisma.word.findUnique({
+  async getAssocitionById(id: number): Promise<Association | null> {
+    return this.prisma.association.findUnique({
       where: {
-        word_id: id
+        association_id: id
       }
     })
   }
-  async createTask(data: Word): Promise<Word> {
-    return this.prisma.word.create({
+  async createAssociation(data: Association): Promise<Association> {
+    return this.prisma.association.create({
       data
     })
   }
-  async updateTask(id: number, data: Word): Promise<Word> {
-    return this.prisma.word.update({
+  async updateAssociation(id: number, data: Association): Promise<Association> {
+    return this.prisma.association.update({
       where: {
-        word_id: id
+        association_id: id
       },
       data
     })
   }
-  async deleteTask(id: number): Promise<Word> {
-    return this.prisma.word.delete({
+  async deleteAssociation(id: number): Promise<Association> {
+    return this.prisma.association.delete({
       where: {
-        word_id: id
+        association_id: id
       }
     })
+  }
+  async getAssociationsByWord(letter: string): Promise<Association[]> {
+    return this.prisma.association.findMany({
+      where: {
+        word: {
+          equals: letter, // Cambiado a equals para buscar la palabra completa
+          mode: 'insensitive' // Hace que la búsqueda no distinga entre mayúsculas y minúsculas
+        }
+      }
+    });
   }
 }

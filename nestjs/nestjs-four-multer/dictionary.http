@@ -1,8 +1,8 @@
 ### GET TASKS
-GET http://localhost:3003/dictionary
+GET http://localhost:3003/story-associations
 
 ### POST TASK
-POST http://localhost:3003/dictionary
+POST http://localhost:3003/story-associations
 Content-Type: application/json
 
 {
@@ -12,10 +12,16 @@ Content-Type: application/json
 }
 
 ### GET TASK BY ID
-GET http://localhost:3003/dictionary/1
+GET http://localhost:3003/story-associations/1
+
+### Get Association with word
+GET http://localhost:3003/story-associations/word/alien
+
+### GET Association with Content
+GET http://localhost:3003/story-associations/1/content
 
 ### PUT TASK
-PUT http://localhost:3003/dictionary/1
+PUT http://localhost:3003/story-associations/1
 Content-Type: application/json
 
 {
@@ -23,6 +29,6 @@ Content-Type: application/json
 }
 
 ### DELETE TASK
-DELETE http://localhost:3003/dictionary/2
+DELETE http://localhost:3003/story-associations/2
 
 

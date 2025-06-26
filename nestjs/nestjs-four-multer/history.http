@@ -1,8 +1,8 @@
 ### GET TASKS
-GET http://localhost:3003/history
+GET http://localhost:3003/story-details
 
 ### POST TASK
-POST http://localhost:3003/history
+POST http://localhost:3003/story-details
 Content-Type: application/json
 
 {
@@ -13,14 +13,14 @@ Content-Type: application/json
 }
 
 ### GET TASK BY ID
-GET http://localhost:3003/history/1
+GET http://localhost:3003/story-details/1
 
 ### GET TASK BY ID
-GET http://localhost:3003/history/user/1
+GET http://localhost:3003/story-details/user/1
 
 
 ### PUT TASK
-PUT http://localhost:3003/history/17
+PUT http://localhost:3003/story-details/17
 Content-Type: application/json
 
 {
@@ -28,6 +28,6 @@ Content-Type: application/json
 }
 
 ### DELETE TASK
-DELETE http://localhost:3003/history/2
+DELETE http://localhost:3003/story-details/2
 
 

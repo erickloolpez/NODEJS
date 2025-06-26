@@ -8,7 +8,7 @@ import { DictionaryModule } from "src/dictionary/dictionary.module";
 @Module({
   controllers: [HistoryController],
   providers: [HistoryService],
-  imports: [PrismaModule, DictionaryModule]
+  imports: [PrismaModule, UserModule]
 })
 export class HistoryModule {
 }

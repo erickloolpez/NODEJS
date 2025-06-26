@@ -1,9 +1,9 @@
 
 ### GET TASKS
-GET http://localhost:3003/words
+GET http://localhost:3003/associations
 
 ### POST TASK
-POST http://localhost:3003/words
+POST http://localhost:3003/associations
 Content-Type: application/json
 
 {
@@ -13,17 +13,20 @@ Content-Type: application/json
 }
 
 ### GET TASK BY ID
-GET http://localhost:3003/words/1
+GET http://localhost:3003/associations/1
+
+### GET Association with Starting letter
+GET http://localhost:3003/associations/starting-letter/d
 
 ### PUT TASK
-PUT http://localhost:3003/words/1
+PUT http://localhost:3003/associations/5
 Content-Type: application/json
 
 {
-  "palabra": "recorcholis"
+  "word": "azucar"
 }
 
 ### DELETE TASK
-DELETE http://localhost:3003/words/2
+DELETE http://localhost:3003/associations/2
 
 

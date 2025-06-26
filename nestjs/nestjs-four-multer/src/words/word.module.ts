@@ -6,7 +6,8 @@ import { WordService } from "./word.service";
 @Module({
   controllers: [WordController],
   providers: [WordService],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
+  exports: [WordService]
 })
 export class WordModule {
 }

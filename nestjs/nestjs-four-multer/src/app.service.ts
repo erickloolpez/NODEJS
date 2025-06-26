@@ -43,49 +43,74 @@ export class AppService {
 
   async processEntry(
     data: {
-      output: {
-        palabras: { word: string; relation: string }[];
-        history: string;
+      palabras: { word_id?: number; dictionary_id?: number; word: string; relation: string; created_at?: string }[];
+      historia: {
+        story_id?: number;
+        user_id?: number;
+        dictionary_id?: number;
+        story_title: string;
+        story: string;
+        character?: string;
+        place?: string;
+        created_at?: string;
+        updated_at?: string;
       };
-      place: string;
-      character: string;
     },
-    id_usuario: number,
-    id_diccionario: number,
-    titulo_historia?: string
+    user_id: number
   ) {
     // Verificar si la estructura es correcta
-    if (!data || !data.output || !data.output.palabras) {
-      throw new Error(`Estructura de datos incorrecta. Se esperaba data.output.palabras`);
+    if (!data || !data.palabras || !data.historia) {
+      throw new Error(`Estructura de datos incorrecta. Se esperaba data.palabras y data.historia`);
     }
 
-    // 1. Guardar palabras
-    const palabrasCreadas = await Promise.all(
-      data.output.palabras.map((p) =>
-        this.prisma.word.create({
-          data: {
-            word: p.word,
-            relation: p.relation,
-            dictionary_id: id_diccionario,
-          },
-        })
-      )
-    );
+    try {
+      // 1. Crear las asociaciones (palabras) en la tabla Association
+      const asociacionesCreadas = await Promise.all(
+        data.palabras.map((palabra) =>
+          this.prisma.association.create({
+            data: {
+              user_id: user_id,
+              word: palabra.word,
+              relation: palabra.relation,
+            },
+          })
+        )
+      );
 
-    // 2. Guardar historia
-    const historiaCreada = await this.prisma.story.create({
-      data: {
-        dictionary_id: id_diccionario,
-        story_title: titulo_historia ?? null,
-        story: data.output.history,
-        place: data.place ?? null,
-        character: data.character ?? null,
-      },
-    });
+      // 2. Crear los detalles de la historia en StoryDetails
+      const storyDetailsCreada = await this.prisma.storyDetails.create({
+        data: {
+          user_id: user_id,
+          title: data.historia.story_title,
+          place: data.historia.place || null,
+          character: data.historia.character || null,
+          story_text: data.historia.story,
+        },
+      });
 
-    return {
-      palabras: palabrasCreadas,
-      historia: historiaCreada,
-    };
+      // 3. Crear las relaciones en la tabla de intersección StoryAssociation
+      // Conectar cada asociación creada con la historia creada
+      const storyAssociationsCreadas = await Promise.all(
+        asociacionesCreadas.map((asociacion) =>
+          this.prisma.storyAssociation.create({
+            data: {
+              story_details_id: storyDetailsCreada.story_details_id,
+              association_id: asociacion.association_id,
+            },
+          })
+        )
+      );
+
+      return {
+        asociaciones: asociacionesCreadas,
+        storyDetails: storyDetailsCreada,
+        storyAssociations: storyAssociationsCreadas,
+        message: `Se crearon ${asociacionesCreadas.length} asociaciones, 1 historia y ${storyAssociationsCreadas.length} relaciones exitosamente`,
+      };
+
+    } catch (error) {
+      console.error('Error en processEntry:', error);
+      throw new Error(`Error al procesar los datos: ${error.message}`);
+    }
   }
 }

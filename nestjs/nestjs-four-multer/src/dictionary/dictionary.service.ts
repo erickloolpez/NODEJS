@@ -1,57 +1,74 @@
 
 import { Injectable } from "@nestjs/common";
-import { Dictionary } from "generated/prisma/client";
+import { StoryAssociation } from "generated/prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "src/users/user.service";
+import { WordService } from "src/words/word.service";
 
 
 @Injectable()
 export class DictionaryService {
 
-  constructor(private prisma: PrismaService, private userService: UserService) {
+  constructor(private prisma: PrismaService, private associationService: WordService) {
 
   }
 
-  async getAllDictionaries(): Promise<Dictionary[]> {
-    return this.prisma.dictionary.findMany()
+  async getAllStoryAssociations(): Promise<StoryAssociation[]> {
+    return this.prisma.storyAssociation.findMany()
   }
 
-  async getDictionaryById(id: number): Promise<Dictionary | null> {
-    return this.prisma.dictionary.findUnique({
+  async getStoryAssociationById(id: number): Promise<StoryAssociation | null> {
+    return this.prisma.storyAssociation.findUnique({
       where: {
-        dictionary_id: id
+        story_association_id: id
       }
     })
   }
-  async createDictionary(data: Dictionary): Promise<Dictionary> {
-    return this.prisma.dictionary.create({
+  async createStoryAssociation(data: StoryAssociation): Promise<StoryAssociation> {
+    return this.prisma.storyAssociation.create({
       data
     })
   }
-  async updateDictionary(id: number, data: Dictionary): Promise<Dictionary> {
-    return this.prisma.dictionary.update({
+  async updateStoryAssociation(id: number, data: StoryAssociation): Promise<StoryAssociation> {
+    return this.prisma.storyAssociation.update({
       where: {
-        dictionary_id: id
+        story_association_id: id
       },
       data
     })
   }
-  async deleteDictionary(id: number): Promise<Dictionary> {
-    return this.prisma.dictionary.delete({
+  async deleteStoryAssociation(id: number): Promise<StoryAssociation> {
+    return this.prisma.storyAssociation.delete({
       where: {
-        dictionary_id: id
+        story_association_id: id
       }
     })
   }
-  async getDictionariesByUserId(userId: number): Promise<Dictionary[]> {
-    const user = await this.userService.getUserById(userId);
-    if (!user) {
-      throw new Error(`User with id ${userId} not found`);
-    }
-    return this.prisma.dictionary.findMany({
+
+  async getContentStory(associationId: number): Promise<StoryAssociation[] | null> {
+    return this.prisma.storyAssociation.findMany({
       where: {
-        user_id: userId
-      }
+        association_id: associationId, // Filtramos por association_id
+      },
+      include: {
+        storyDetails: true, // Incluimos los detalles de la historia relacionada
+      },
+    });
+  }
+  async getStoryAssociationByWord(associationLetter: string): Promise<StoryAssociation[]> {
+    const word = await this.associationService.getAssociationsByWord(associationLetter);
+    if (!word) {
+      throw new Error(`Word with letter ${associationLetter} not found`);
+    }
+    return this.prisma.storyAssociation.findMany({
+      where: {
+        association_id: {
+          in: word.map(w => w.association_id)
+        }
+      },
+      include: {
+        storyDetails: true, // Incluimos los detalles de la historia relacionada
+      },
     })
   }
 }

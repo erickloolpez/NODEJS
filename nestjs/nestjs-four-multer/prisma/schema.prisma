@@ -24,56 +24,54 @@ model User {
   updated_at DateTime @default(now()) @updatedAt @map("updated_at")
 
   // Relations
-  dictionaries Dictionary[]
+  associations Association[] // Un usuario tiene muchas asociaciones
+  storyDetails StoryDetails[] // Un usuario también crea los detalles de sus historias
 
   @@index([email], map: "idx_users_email")
   @@map("users")
 }
 
-model Dictionary {
-  dictionary_id   Int      @id @default(autoincrement()) @map("dictionary_id")
-  user_id         Int      @map("user_id")
-  dictionary_name String?  @map("dictionary_name") @db.VarChar(255)
-  description     String?  @db.Text
-  created_at      DateTime @default(now()) @map("created_at")
-  updated_at      DateTime @default(now()) @updatedAt @map("updated_at")
+model Association {
+  association_id Int      @id @default(autoincrement()) @map("association_id")
+  user_id        Int      @map("user_id") // Foreign key to User
+  word           String   @db.VarChar(255) // El nombre de la palabra/asociación
+  relation       String   @db.Text // La descripción o relación de la palabra
+  created_at     DateTime @default(now()) @map("created_at")
 
   // Relations
-  user    User    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  words   Word[]
-  stories Story[]
+  user             User               @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  storyAssocations StoryAssociation[] // Una asociación puede estar en muchas StoryAssociation (intersección)
 
-  @@index([user_id], map: "idx_dictionaries_user")
-  @@map("dictionaries")
+  @@index([user_id], map: "idx_associations_user")
+  @@map("associations")
 }
 
-model Word {
-  word_id       Int      @id @default(autoincrement()) @map("word_id")
-  dictionary_id Int      @map("dictionary_id")
-  word          String   @db.VarChar(255)
-  relation      String   @db.Text
-  created_at    DateTime @default(now()) @map("created_at")
+model StoryDetails {
+  story_details_id Int      @id @default(autoincrement()) @map("story_details_id")
+  user_id          Int      @map("user_id") // El usuario que creó esta historia
+  title            String   @db.VarChar(255)
+  place            String?  @db.VarChar(255) // Lugar
+  character        String?  @db.VarChar(255) // Personaje
+  story_text       String   @db.Text // ¡La historia completa se guarda aquí!
+  created_at       DateTime @default(now()) @map("created_at")
+  updated_at       DateTime @default(now()) @updatedAt @map("updated_at")
 
   // Relations
-  dictionary Dictionary @relation(fields: [dictionary_id], references: [dictionary_id], onDelete: Cascade)
+  user              User               @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  storyAssociations StoryAssociation[] // Los detalles de una historia se pueden componer de muchas asociaciones
 
-  @@index([dictionary_id], map: "idx_words_dictionary")
-  @@map("words")
+  @@map("story_details") // Renombramos la tabla 'headers' a 'story_details'
 }
 
-model Story {
-  story_id      Int      @id @default(autoincrement()) @map("story_id")
-  dictionary_id Int      @map("dictionary_id")
-  story_title   String?  @map("story_title") @db.VarChar(255)
-  story         String   @db.Text
-  character     String?  @db.VarChar(255)
-  place         String?  @db.VarChar(255)
-  created_at    DateTime @default(now()) @map("created_at")
-  updated_at    DateTime @default(now()) @updatedAt @map("updated_at")
+model StoryAssociation {
+  story_association_id Int @id @default(autoincrement()) @map("story_association_id")
+  story_details_id     Int @map("story_details_id") // Foreign key to StoryDetails
+  association_id       Int @map("association_id") // Foreign key to Association
 
   // Relations
-  dictionary Dictionary @relation(fields: [dictionary_id], references: [dictionary_id], onDelete: Cascade)
+  storyDetails StoryDetails @relation(fields: [story_details_id], references: [story_details_id], onDelete: Cascade)
+  association  Association  @relation(fields: [association_id], references: [association_id], onDelete: Cascade)
 
-  @@index([dictionary_id], map: "idx_stories_dictionary")
-  @@map("stories")
+  @@unique([story_details_id, association_id], map: "unique_story_association_order")
+  @@map("story_associations") // Esta es tu nueva tabla de intersección
 }
