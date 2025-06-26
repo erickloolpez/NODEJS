@@ -10,23 +10,30 @@ export class UserService {
 
   }
 
-  async getAllTasks(): Promise<User[]> {
+  async getAllUsers(): Promise<User[]> {
     return this.prisma.user.findMany()
   }
 
-  async getTaskById(id: number): Promise<User | null> {
+  async getUserById(id: number): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
         user_id: id
       }
     })
   }
-  async createTask(data: User): Promise<User> {
+  async getUserByEmail(email: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: {
+        email: email
+      }
+    })
+  }
+  async createUser(data: User): Promise<User> {
     return this.prisma.user.create({
       data
     })
   }
-  async updateTask(id: number, data: User): Promise<User> {
+  async updateUser(id: number, data: User): Promise<User> {
     return this.prisma.user.update({
       where: {
         user_id: id
@@ -34,7 +41,7 @@ export class UserService {
       data
     })
   }
-  async deleteTask(id: number): Promise<User> {
+  async deleteUser(id: number): Promise<User> {
     return this.prisma.user.delete({
       where: {
         user_id: id

@@ -6,12 +6,16 @@ POST http://localhost:3003/users
 Content-Type: application/json
 
 {
-  "nombre_usuario": "erickloolpez",
-  "email": "erick@notion.com"
+  "password": "erickloolpez",
+  "email": "erick@notion.com",
+  "username": null
 }
 
 ### GET TASK BY ID
 GET http://localhost:3003/users/1
+
+### GET USER BY EMAIL
+GET http://localhost:3003/users?email=erick@notion.com
 
 ### PUT TASK
 PUT http://localhost:3003/users/1

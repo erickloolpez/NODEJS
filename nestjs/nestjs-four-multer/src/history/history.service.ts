@@ -1,12 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { Story } from "generated/prisma/client";
+import { DictionaryService } from "src/dictionary/dictionary.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "src/users/user.service";
 
 @Injectable()
 export class HistoryService {
 
-  constructor(private prisma: PrismaService, private userService: UserService) { }
+  constructor(private prisma: PrismaService, private dictionaryService: DictionaryService) { }
 
   async getAllHistorias(): Promise<Story[]> {
     return this.prisma.story.findMany();
@@ -43,14 +44,14 @@ export class HistoryService {
     });
   }
 
-  async getHistoriasByUserId(userId: number): Promise<Story[]> {
-    const user = await this.userService.getTaskById(userId);
-    if (!user) {
-      throw new Error(`User with id ${userId} not found`);
+  async getHistoriasByUserId(dictionaryId: number): Promise<Story[]> {
+    const dictionary = await this.dictionaryService.getDictionaryById(dictionaryId);
+    if (!dictionary) {
+      throw new Error(`Dictionary with id ${dictionaryId} not found`);
     }
     return this.prisma.story.findMany({
       where: {
-        user_id: user.user_id
+        dictionary_id: dictionary.dictionary_id
       }
     });
   }

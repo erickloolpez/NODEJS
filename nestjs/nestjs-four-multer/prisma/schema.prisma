@@ -17,14 +17,14 @@ datasource db {
 
 model User {
   user_id    Int      @id @default(autoincrement()) @map("user_id")
-  username   String   @map("username") @db.VarChar(255)
+  username   String?  @map("username") @db.VarChar(255)
+  password   String   @map("password") @db.VarChar(255)
   email      String   @unique @db.VarChar(255)
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @default(now()) @updatedAt @map("updated_at")
 
   // Relations
   dictionaries Dictionary[]
-  stories      Story[]
 
   @@index([email], map: "idx_users_email")
   @@map("users")
@@ -63,7 +63,6 @@ model Word {
 
 model Story {
   story_id      Int      @id @default(autoincrement()) @map("story_id")
-  user_id       Int      @map("user_id")
   dictionary_id Int      @map("dictionary_id")
   story_title   String?  @map("story_title") @db.VarChar(255)
   story         String   @db.Text
@@ -73,10 +72,8 @@ model Story {
   updated_at    DateTime @default(now()) @updatedAt @map("updated_at")
 
   // Relations
-  user       User       @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   dictionary Dictionary @relation(fields: [dictionary_id], references: [dictionary_id], onDelete: Cascade)
 
-  @@index([user_id], map: "idx_stories_user")
   @@index([dictionary_id], map: "idx_stories_dictionary")
   @@map("stories")
 }

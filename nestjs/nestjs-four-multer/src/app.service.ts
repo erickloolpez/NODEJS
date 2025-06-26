@@ -75,7 +75,6 @@ export class AppService {
     // 2. Guardar historia
     const historiaCreada = await this.prisma.story.create({
       data: {
-        user_id: id_usuario,
         dictionary_id: id_diccionario,
         story_title: titulo_historia ?? null,
         story: data.output.history,
