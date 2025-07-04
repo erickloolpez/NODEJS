@@ -71,4 +71,9 @@ export class DictionaryService {
       },
     })
   }
+
+  async getStoryAssociationByWordUsingSP(associationLetter: string): Promise<any[]> {
+    const resultado = await this.prisma.$queryRaw`SELECT * FROM get_stories_by_association_word(${associationLetter})`;
+    return resultado as any[];
+  }
 }

@@ -34,6 +34,15 @@ export class DictionaryController {
     }
   }
 
+  @Get('sp/:letter')
+  async getStoryAssociationByWordUsingSP(@Param('letter') letter: string) {
+    try {
+      return await this.dictionaryService.getStoryAssociationByWordUsingSP(letter);
+    } catch (error) {
+      throw new BadRequestException(`Error fetching story associations by word: ${error.message}`);
+    }
+  }
+
   @Get(':id/content')
   async getContentStory(@Param('id') id: string) {
     return await this.dictionaryService.getContentStory(+id);

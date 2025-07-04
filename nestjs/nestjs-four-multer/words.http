@@ -15,8 +15,8 @@ Content-Type: application/json
 ### GET TASK BY ID
 GET http://localhost:3003/associations/1
 
-### GET Association with Starting letter
-GET http://localhost:3003/associations/starting-letter/d
+### GET Association with word
+GET http://localhost:3003/associations/word/abuela
 
 ### PUT TASK
 PUT http://localhost:3003/associations/5

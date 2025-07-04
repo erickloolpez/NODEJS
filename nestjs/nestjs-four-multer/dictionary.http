@@ -15,7 +15,9 @@ Content-Type: application/json
 GET http://localhost:3003/story-associations/1
 
 ### Get Association with word
-GET http://localhost:3003/story-associations/word/alien
+GET http://localhost:3003/story-associations/word/abuela
+### Get Association with word using SP
+GET http://localhost:3003/story-associations/sp/alien
 
 ### GET Association with Content
 GET http://localhost:3003/story-associations/1/content
