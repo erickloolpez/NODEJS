@@ -10,6 +10,7 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
+
   async processFileUpload(file: Express.Multer.File): Promise<any> {
     // Construir la URL pública del archivo
     const publicUrl = `http://localhost:3003/public/${file.filename}`;
@@ -30,15 +31,17 @@ export class AppService {
       const response = await axios.post('https://n8n.srv831273.hstgr.cloud/webhook-test/9552c142-3a97-4805-840a-28f3a04423b8', payload);
       console.log('Webhook de n8n llamado exitosamente:', response.status);
       responseWebhook = response.data;
+      console.log('Respuesta del webhook de n8n:', responseWebhook);
+      return {
+        message: 'File uploaded successfully',
+        data: response.data,
+      };
     } catch (error) {
       console.error('Error llamando al webhook de n8n:', error.message);
-      // Aquí puedes decidir si quieres lanzar una excepción o solo loggear el error
+      return {
+        message: 'Error al llamar al webhook de n8n',
+      };
     }
-
-    return {
-      message: 'File uploaded successfully',
-      ...payload,
-    };
   }
 
   async processEntry(
