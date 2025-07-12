@@ -46,13 +46,18 @@ export class AppService {
 
   async processEntry(
     data: {
-      palabras: { word_id?: number; dictionary_id?: number; word: string; relation: string; created_at?: string }[];
-      historia: {
-        story_id?: number;
+      palabras: {
+        word_id?: number;
         user_id?: number;
-        dictionary_id?: number;
-        story_title: string;
-        story: string;
+        word: string;
+        relation: string;
+        created_at?: string
+      }[];
+      historia: {
+        story_details_id?: number;
+        user_id?: number;
+        title: string;
+        story_text: string;
         character?: string;
         place?: string;
         created_at?: string;
@@ -84,15 +89,14 @@ export class AppService {
       const storyDetailsCreada = await this.prisma.storyDetails.create({
         data: {
           user_id: user_id,
-          title: data.historia.story_title,
+          title: data.historia.title,
           place: data.historia.place || null,
           character: data.historia.character || null,
-          story_text: data.historia.story,
+          story_text: data.historia.story_text,
         },
       });
 
       // 3. Crear las relaciones en la tabla de intersección StoryAssociation
-      // Conectar cada asociación creada con la historia creada
       const storyAssociationsCreadas = await Promise.all(
         asociacionesCreadas.map((asociacion) =>
           this.prisma.storyAssociation.create({
